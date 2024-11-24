@@ -1,0 +1,162 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      kubeadm.alpha.kubernetes.io/cri-socket: unix:///run/containerd/containerd.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2024-11-23T06:44:23Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: camunda-local-control-plane
+      kubernetes.io/os: linux
+      node-role.kubernetes.io/control-plane: ""
+    name: camunda-local-control-plane
+    resourceVersion: "2654"
+    uid: c1ac8637-06d7-4a76-9570-0b0f5fdec34b
+  spec:
+    podCIDR: 10.244.0.0/24
+    podCIDRs:
+    - 10.244.0.0/24
+    providerID: kind://docker/camunda-local/camunda-local-control-plane
+  status:
+    addresses:
+    - address: 172.18.0.2
+      type: InternalIP
+    - address: camunda-local-control-plane
+      type: Hostname
+    allocatable:
+      cpu: "12"
+      ephemeral-storage: 100557880Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 24607352Ki
+      pods: "110"
+    capacity:
+      cpu: "12"
+      ephemeral-storage: 100557880Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 24607352Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2024-11-23T07:05:18Z"
+      lastTransitionTime: "2024-11-23T06:44:21Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2024-11-23T07:05:18Z"
+      lastTransitionTime: "2024-11-23T06:44:21Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2024-11-23T07:05:18Z"
+      lastTransitionTime: "2024-11-23T06:44:21Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2024-11-23T07:05:18Z"
+      lastTransitionTime: "2024-11-23T06:44:43Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - docker.io/camunda/keycloak@sha256:f70cf9c3ff64958e709510e008066314c9d04a43580178971e546164587d640a
+      - docker.io/camunda/keycloak:25.0.6
+      sizeBytes: 586761446
+    - names:
+      - docker.io/bitnami/elasticsearch@sha256:fccc35cf851d27d6f53114c35025115b4e72d294a58f2f0b72c71f775d846468
+      - docker.io/bitnami/elasticsearch:8.15.3
+      sizeBytes: 534589392
+    - names:
+      - docker.io/camunda/zeebe@sha256:8f95e06c1e1bf563987bef9fb2766b816568361a7a874febf6a875d196bd4f63
+      - docker.io/camunda/zeebe:8.6.5
+      sizeBytes: 405428926
+    - names:
+      - docker.io/camunda/operate@sha256:c5f1da00f3aad751cbea2153616b56c7be380a9e41b88b24ee6433eae87af3db
+      - docker.io/camunda/operate:8.6.5
+      sizeBytes: 380087224
+    - names:
+      - docker.io/camunda/tasklist@sha256:f0e4286da3af5c438fe1d4272e1707d0c58c3e34e0b18a03bda89d344658a9d1
+      - docker.io/camunda/tasklist:8.6.5
+      sizeBytes: 380082203
+    - names:
+      - docker.io/camunda/connectors-bundle@sha256:eae7472630254085c7c0eb5aee0ae072a760fd4423cdd90bb05df8913af2c94e
+      - docker.io/camunda/connectors-bundle:8.6.4
+      sizeBytes: 347408137
+    - names:
+      - docker.io/camunda/identity@sha256:5f7589e6e61633aadd9c3ae2adfc77a7f6f8af38f62c9fb123fb4a1ecfa3794c
+      - docker.io/camunda/identity:8.6.4
+      sizeBytes: 166707193
+    - names:
+      - docker.io/bitnami/postgresql@sha256:12a36eb5c817a2e36c0dab661797b0d9cf30442133458de4ce2ad57b2f6dd9c1
+      - docker.io/bitnami/postgresql:15.8.0-debian-12-r23
+      sizeBytes: 110347044
+    - names:
+      - docker.io/library/import-2024-11-08@sha256:a42a62e86893707dc96af5e27577ae4307e341d5b9246ca7b468ea4db3805c62
+      - registry.k8s.io/kube-apiserver-amd64:v1.31.2
+      - registry.k8s.io/kube-apiserver:v1.31.2
+      sizeBytes: 95268849
+    - names:
+      - docker.io/library/import-2024-11-08@sha256:d5b7912e7437183537b4ed4b41c711ba378ce0d75556e06ae23f8d75ec332a04
+      - registry.k8s.io/kube-proxy-amd64:v1.31.2
+      - registry.k8s.io/kube-proxy:v1.31.2
+      sizeBytes: 92781242
+    - names:
+      - docker.io/library/import-2024-11-08@sha256:fd7dbfa00d57300251a81db7ac38325fddb811d2bd39fdf8cd97240ef69e9f5c
+      - registry.k8s.io/kube-controller-manager-amd64:v1.31.2
+      - registry.k8s.io/kube-controller-manager:v1.31.2
+      sizeBytes: 89468744
+    - names:
+      - docker.io/library/import-2024-11-08@sha256:1716b35b3ed8d6f517d128ed0820f56a3285daae12a68f9110597a4e1a008845
+      - registry.k8s.io/kube-scheduler-amd64:v1.31.2
+      - registry.k8s.io/kube-scheduler:v1.31.2
+      sizeBytes: 68452680
+    - names:
+      - registry.k8s.io/etcd:3.5.15-0
+      sizeBytes: 56909194
+    - names:
+      - docker.io/bitnami/os-shell@sha256:17444b4b2c96d0761ca6164d5d7310e6908d1c2b03a961f72a4712422b1eb5f5
+      - docker.io/bitnami/os-shell:12-debian-12-r32
+      sizeBytes: 56137181
+    - names:
+      - docker.io/kindest/kindnetd:v20241023-a345ebe4
+      sizeBytes: 38597290
+    - names:
+      - docker.io/kindest/local-path-provisioner:v20240813-c6f155d6
+      sizeBytes: 19430244
+    - names:
+      - registry.k8s.io/coredns/coredns:v1.11.3
+      sizeBytes: 18562039
+    - names:
+      - docker.io/kindest/local-path-helper:v20230510-486859a6
+      sizeBytes: 3052318
+    - names:
+      - registry.k8s.io/pause:3.10
+      sizeBytes: 320368
+    nodeInfo:
+      architecture: amd64
+      bootID: 07ee79d0-1ecd-4e41-a2b3-40fffe3702aa
+      containerRuntimeVersion: containerd://1.7.18
+      kernelVersion: 6.8.0-41-generic
+      kubeProxyVersion: v1.31.2
+      kubeletVersion: v1.31.2
+      machineID: e611901286ff43c4a4c95fcdcc3c9e62
+      operatingSystem: linux
+      osImage: Debian GNU/Linux 12 (bookworm)
+      systemUUID: e9b8fe6f-8ae7-490e-8e3a-a3df0d814a58
+kind: List
+metadata:
+  resourceVersion: ""

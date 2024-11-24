@@ -1,0 +1,961 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: camunda-platform
+      meta.helm.sh/release-namespace: default
+    creationTimestamp: "2024-11-23T06:46:26Z"
+    generation: 1
+    labels:
+      app: camunda-platform
+      app.kubernetes.io/component: connectors
+      app.kubernetes.io/instance: camunda-platform
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: camunda-platform
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/version: 8.6.4
+      helm.sh/chart: camunda-platform-11.0.4
+    name: camunda-platform-connectors
+    namespace: default
+    resourceVersion: "1429"
+    uid: 9a41bd44-99c3-46af-9f47-03f09740db68
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: camunda-platform
+        app.kubernetes.io/component: connectors
+        app.kubernetes.io/instance: camunda-platform
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: camunda-platform
+        app.kubernetes.io/part-of: camunda-platform
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          checksum/config: 93bcf0bbf6924024a2d446c9ca791d8f41071ffb23c7325d78f0cf831c67dc1e
+        creationTimestamp: null
+        labels:
+          app: camunda-platform
+          app.kubernetes.io/component: connectors
+          app.kubernetes.io/instance: camunda-platform
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: camunda-platform
+          app.kubernetes.io/part-of: camunda-platform
+          app.kubernetes.io/version: 8.6.4
+          helm.sh/chart: camunda-platform-11.0.4
+      spec:
+        containers:
+        - env:
+          - name: CAMUNDA_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: CAMUNDA_LICENSE_KEY
+                name: camunda-platform-license
+          - name: ZEEBE_CLIENT_ID
+            value: zeebe
+          - name: ZEEBE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: zeebe-secret
+                name: camunda-platform-zeebe-identity-secret
+          - name: ZEEBE_AUTHORIZATION_SERVER_URL
+            value: http://camunda-platform-keycloak:80/auth/realms/camunda-platform/protocol/openid-connect/token
+          - name: ZEEBE_TOKEN_AUDIENCE
+            value: zeebe-api
+          envFrom:
+          - configMapRef:
+              name: camunda-platform-identity-env-vars
+          image: camunda/connectors-bundle:8.6.4
+          imagePullPolicy: IfNotPresent
+          name: connectors
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /config/application.yml
+            name: config
+            subPath: application.yml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        serviceAccount: camunda-platform-connectors
+        serviceAccountName: camunda-platform-connectors
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp
+        - configMap:
+            defaultMode: 420
+            name: camunda-platform-connectors-configuration
+          name: config
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-11-23T06:50:57Z"
+      lastUpdateTime: "2024-11-23T06:50:57Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2024-11-23T06:46:26Z"
+      lastUpdateTime: "2024-11-23T06:50:57Z"
+      message: ReplicaSet "camunda-platform-connectors-7f75f48fc" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: camunda-platform
+      meta.helm.sh/release-namespace: default
+    creationTimestamp: "2024-11-23T06:46:26Z"
+    generation: 1
+    labels:
+      app: camunda-platform
+      app.kubernetes.io/component: identity
+      app.kubernetes.io/instance: camunda-platform
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: camunda-platform
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/version: 8.6.4
+      helm.sh/chart: camunda-platform-11.0.4
+    name: camunda-platform-identity
+    namespace: default
+    resourceVersion: "1421"
+    uid: d69f7b35-786d-43df-a7cc-34527dc66398
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: camunda-platform
+        app.kubernetes.io/component: identity
+        app.kubernetes.io/instance: camunda-platform
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: camunda-platform
+        app.kubernetes.io/part-of: camunda-platform
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          checksum/config: 8b86bfa5bfab7c767e0766a12ccbcfae1ee1d1c35c5aa6dca897e9ecc195a976
+        creationTimestamp: null
+        labels:
+          app: camunda-platform
+          app.kubernetes.io/component: identity
+          app.kubernetes.io/instance: camunda-platform
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: camunda-platform
+          app.kubernetes.io/part-of: camunda-platform
+          app.kubernetes.io/version: 8.6.4
+          helm.sh/chart: camunda-platform-11.0.4
+      spec:
+        containers:
+        - env:
+          - name: CAMUNDA_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: CAMUNDA_LICENSE_KEY
+                name: camunda-platform-license
+          - name: KEYCLOAK_INIT_OPERATE_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: operate-secret
+                name: camunda-platform-operate-identity-secret
+          - name: KEYCLOAK_INIT_CONSOLE_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: console-secret
+                name: camunda-platform-console-identity-secret
+          - name: KEYCLOAK_INIT_TASKLIST_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: tasklist-secret
+                name: camunda-platform-tasklist-identity-secret
+          - name: KEYCLOAK_INIT_OPTIMIZE_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: optimize-secret
+                name: camunda-platform-optimize-identity-secret
+          - name: KEYCLOAK_INIT_WEBMODELER_ROOT_URL
+            value: http://localhost:8084
+          - name: KEYCLOAK_INIT_ZEEBE_NAME
+            value: Zeebe
+          - name: KEYCLOAK_CLIENTS_0_NAME
+            value: Connectors
+          - name: KEYCLOAK_CLIENTS_0_ID
+            value: connectors
+          - name: KEYCLOAK_CLIENTS_0_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: connectors-secret
+                name: camunda-platform-connectors-identity-secret
+          - name: KEYCLOAK_CLIENTS_0_ROOT_URL
+            value: http://placeholder
+          - name: KEYCLOAK_CLIENTS_0_REDIRECT_URIS_0
+            value: /
+          - name: KEYCLOAK_CLIENTS_0_PERMISSIONS_0_RESOURCE_SERVER_ID
+            value: operate-api
+          - name: KEYCLOAK_CLIENTS_0_PERMISSIONS_0_DEFINITION
+            value: read:*
+          - name: KEYCLOAK_CLIENTS_1_NAME
+            value: Zeebe
+          - name: KEYCLOAK_CLIENTS_1_ID
+            value: zeebe
+          - name: KEYCLOAK_CLIENTS_1_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: zeebe-secret
+                name: camunda-platform-zeebe-identity-secret
+          - name: KEYCLOAK_CLIENTS_1_TYPE
+            value: M2M
+          - name: KEYCLOAK_CLIENTS_1_PERMISSIONS_0_RESOURCE_SERVER_ID
+            value: zeebe-api
+          - name: KEYCLOAK_CLIENTS_1_PERMISSIONS_0_DEFINITION
+            value: write:*
+          - name: KEYCLOAK_URL
+            value: http://camunda-platform-keycloak:80/auth
+          - name: KEYCLOAK_SETUP_USER
+            value: admin
+          - name: KEYCLOAK_SETUP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: admin-password
+                name: camunda-platform-keycloak
+          - name: KEYCLOAK_USERS_0_USERNAME
+            value: demo
+          - name: KEYCLOAK_USERS_0_PASSWORD
+            value: demo
+          - name: KEYCLOAK_USERS_0_EMAIL
+            value: demo@example.org
+          - name: KEYCLOAK_USERS_0_FIRST_NAME
+            value: Demo
+          - name: KEYCLOAK_USERS_0_LAST_NAME
+            value: User
+          - name: KEYCLOAK_USERS_0_ROLES_0
+            value: Identity
+          - name: KEYCLOAK_USERS_0_ROLES_1
+            value: Operate
+          - name: KEYCLOAK_USERS_0_ROLES_2
+            value: Tasklist
+          - name: KEYCLOAK_USERS_0_ROLES_3
+            value: Optimize
+          - name: KEYCLOAK_USERS_0_ROLES_4
+            value: Web Modeler
+          - name: KEYCLOAK_USERS_0_ROLES_5
+            value: Web Modeler Admin
+          - name: KEYCLOAK_USERS_0_ROLES_6
+            value: Console
+          image: camunda/identity:8.6.4
+          imagePullPolicy: IfNotPresent
+          name: camunda-platform
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8082
+            name: metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /actuator/health
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 600m
+              memory: 400Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /app/config/application.yaml
+            name: config
+            subPath: application.yaml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        serviceAccount: camunda-platform-identity
+        serviceAccountName: camunda-platform-identity
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp
+        - configMap:
+            defaultMode: 420
+            name: camunda-platform-identity-configuration
+          name: config
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-11-23T06:50:55Z"
+      lastUpdateTime: "2024-11-23T06:50:55Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2024-11-23T06:46:26Z"
+      lastUpdateTime: "2024-11-23T06:50:55Z"
+      message: ReplicaSet "camunda-platform-identity-5c4f79749b" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: camunda-platform
+      meta.helm.sh/release-namespace: default
+    creationTimestamp: "2024-11-23T06:46:26Z"
+    generation: 1
+    labels:
+      app: camunda-platform
+      app.kubernetes.io/component: operate
+      app.kubernetes.io/instance: camunda-platform
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: camunda-platform
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/version: 8.6.5
+      helm.sh/chart: camunda-platform-11.0.4
+    name: camunda-platform-operate
+    namespace: default
+    resourceVersion: "1923"
+    uid: 70aefe83-7cd2-4529-ab84-50ab7197bc6e
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: camunda-platform
+        app.kubernetes.io/component: operate
+        app.kubernetes.io/instance: camunda-platform
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: camunda-platform
+        app.kubernetes.io/part-of: camunda-platform
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          checksum/config: dc87e88153c7197a84cd81491e79b65addb2b00650b611f2c398fd6507eed35d
+        creationTimestamp: null
+        labels:
+          app: camunda-platform
+          app.kubernetes.io/component: operate
+          app.kubernetes.io/instance: camunda-platform
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: camunda-platform
+          app.kubernetes.io/part-of: camunda-platform
+          app.kubernetes.io/version: 8.6.5
+          helm.sh/chart: camunda-platform-11.0.4
+      spec:
+        containers:
+        - env:
+          - name: CAMUNDA_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: CAMUNDA_LICENSE_KEY
+                name: camunda-platform-license
+          - name: CAMUNDA_IDENTITY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: operate-secret
+                name: camunda-platform-operate-identity-secret
+          - name: ZEEBE_CLIENT_ID
+            value: zeebe
+          - name: ZEEBE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: zeebe-secret
+                name: camunda-platform-zeebe-identity-secret
+          - name: ZEEBE_AUTHORIZATION_SERVER_URL
+            value: http://camunda-platform-keycloak:80/auth/realms/camunda-platform/protocol/openid-connect/token
+          - name: ZEEBE_TOKEN_AUDIENCE
+            value: zeebe-api
+          - name: ZEEBE_CLIENT_CONFIG_PATH
+            value: /tmp/zeebe_auth_cache
+          - name: ZEEBE_GATEWAY_CLUSTER_HOST
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: ZEEBE_GATEWAY_CLUSTER_MEMBERID
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: ZEEBE_GATEWAY_CLUSTER_CLUSTERNAME
+            value: camunda-platform-zeebe
+          - name: ZEEBE_GATEWAY_CLUSTER_PORT
+            value: "26502"
+          - name: ZEEBE_GATEWAY_CLUSTER_INITIALCONTACTPOINTS
+            value: camunda-platform-zeebe:26502
+          envFrom:
+          - configMapRef:
+              name: camunda-platform-identity-env-vars
+          image: camunda/operate:8.6.5
+          imagePullPolicy: IfNotPresent
+          name: operate
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9600
+            name: management
+            protocol: TCP
+          - containerPort: 26502
+            name: internal
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /actuator/health/readiness
+              port: management
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 600m
+              memory: 400Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /usr/local/operate/config/application.yaml
+            name: config
+            subPath: application.yaml
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /camunda
+            name: camunda
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - /bin/sh
+          - /usr/local/operate/bin/migrate
+          image: camunda/operate:8.6.5
+          imagePullPolicy: IfNotPresent
+          name: migration
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 600m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /usr/local/operate/config/application.yaml
+            name: config
+            subPath: application.yaml
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /camunda
+            name: camunda
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        serviceAccount: camunda-platform-operate
+        serviceAccountName: camunda-platform-operate
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 484
+            name: camunda-platform-operate-configuration
+          name: config
+        - emptyDir: {}
+          name: tmp
+        - emptyDir: {}
+          name: camunda
+  status:
+    conditions:
+    - lastTransitionTime: "2024-11-23T06:46:26Z"
+      lastUpdateTime: "2024-11-23T06:46:26Z"
+      message: Deployment does not have minimum availability.
+      reason: MinimumReplicasUnavailable
+      status: "False"
+      type: Available
+    - lastTransitionTime: "2024-11-23T06:56:27Z"
+      lastUpdateTime: "2024-11-23T06:56:27Z"
+      message: ReplicaSet "camunda-platform-operate-587f9446f8" has timed out progressing.
+      reason: ProgressDeadlineExceeded
+      status: "False"
+      type: Progressing
+    observedGeneration: 1
+    replicas: 1
+    unavailableReplicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: camunda-platform
+      meta.helm.sh/release-namespace: default
+    creationTimestamp: "2024-11-23T06:46:26Z"
+    generation: 1
+    labels:
+      app: camunda-platform
+      app.kubernetes.io/component: tasklist
+      app.kubernetes.io/instance: camunda-platform
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: camunda-platform
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/version: 8.6.5
+      helm.sh/chart: camunda-platform-11.0.4
+    name: camunda-platform-tasklist
+    namespace: default
+    resourceVersion: "1922"
+    uid: a3ffadc5-6ded-4e81-b824-b970c9b5b638
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: camunda-platform
+        app.kubernetes.io/component: tasklist
+        app.kubernetes.io/instance: camunda-platform
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: camunda-platform
+        app.kubernetes.io/part-of: camunda-platform
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          checksum/config: 8f3c6591b7528fb511efb5a96f453ee9c1d722c079de23529fd0eb72452c0746
+        creationTimestamp: null
+        labels:
+          app: camunda-platform
+          app.kubernetes.io/component: tasklist
+          app.kubernetes.io/instance: camunda-platform
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: camunda-platform
+          app.kubernetes.io/part-of: camunda-platform
+          app.kubernetes.io/version: 8.6.5
+          helm.sh/chart: camunda-platform-11.0.4
+      spec:
+        containers:
+        - env:
+          - name: CAMUNDA_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: CAMUNDA_LICENSE_KEY
+                name: camunda-platform-license
+          - name: CAMUNDA_IDENTITY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: tasklist-secret
+                name: camunda-platform-tasklist-identity-secret
+          - name: ZEEBE_CLIENT_ID
+            value: zeebe
+          - name: ZEEBE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: zeebe-secret
+                name: camunda-platform-zeebe-identity-secret
+          - name: ZEEBE_AUTHORIZATION_SERVER_URL
+            value: http://camunda-platform-keycloak:80/auth/realms/camunda-platform/protocol/openid-connect/token
+          - name: ZEEBE_TOKEN_AUDIENCE
+            value: zeebe-api
+          - name: HOME
+            value: /parent
+          - name: ZEEBE_CLIENT_CONFIG_PATH
+            value: /tmp/zeebe_auth_cache
+          - name: ZEEBE_GATEWAY_CLUSTER_HOST
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: ZEEBE_GATEWAY_CLUSTER_MEMBERID
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: ZEEBE_GATEWAY_CLUSTER_CLUSTERNAME
+            value: camunda-platform-zeebe
+          - name: ZEEBE_GATEWAY_CLUSTER_PORT
+            value: "26502"
+          - name: ZEEBE_GATEWAY_CLUSTER_INITIALCONTACTPOINTS
+            value: camunda-platform-zeebe:26502
+          envFrom:
+          - configMapRef:
+              name: camunda-platform-identity-env-vars
+          image: camunda/tasklist:8.6.5
+          imagePullPolicy: IfNotPresent
+          name: tasklist
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9600
+            name: management
+            protocol: TCP
+          - containerPort: 26502
+            name: internal
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /actuator/health/readiness
+              port: management
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 400m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /usr/local/tasklist/config/application.yaml
+            name: config
+            subPath: application.yaml
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /camunda
+            name: camunda
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        serviceAccount: camunda-platform-tasklist
+        serviceAccountName: camunda-platform-tasklist
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 484
+            name: camunda-platform-tasklist-configuration
+          name: config
+        - emptyDir: {}
+          name: tmp
+        - emptyDir: {}
+          name: camunda
+  status:
+    conditions:
+    - lastTransitionTime: "2024-11-23T06:46:26Z"
+      lastUpdateTime: "2024-11-23T06:46:26Z"
+      message: Deployment does not have minimum availability.
+      reason: MinimumReplicasUnavailable
+      status: "False"
+      type: Available
+    - lastTransitionTime: "2024-11-23T06:56:27Z"
+      lastUpdateTime: "2024-11-23T06:56:27Z"
+      message: ReplicaSet "camunda-platform-tasklist-869787959f" has timed out progressing.
+      reason: ProgressDeadlineExceeded
+      status: "False"
+      type: Progressing
+    observedGeneration: 1
+    replicas: 1
+    unavailableReplicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: camunda-platform
+      meta.helm.sh/release-namespace: default
+    creationTimestamp: "2024-11-23T06:46:26Z"
+    generation: 1
+    labels:
+      app: camunda-platform
+      app.kubernetes.io/component: zeebe-gateway
+      app.kubernetes.io/instance: camunda-platform
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: camunda-platform
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/version: 8.6.5
+      helm.sh/chart: camunda-platform-11.0.4
+    name: camunda-platform-zeebe-gateway
+    namespace: default
+    resourceVersion: "1104"
+    uid: 64d01f11-286e-476d-8641-7439c50a8186
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: camunda-platform
+        app.kubernetes.io/component: zeebe-gateway
+        app.kubernetes.io/instance: camunda-platform
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: camunda-platform
+        app.kubernetes.io/part-of: camunda-platform
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          checksum/config: 582b5d6c189b849d27fc9a714331289c2c991df985e994a4c2f3aaddd1532c20
+        creationTimestamp: null
+        labels:
+          app: camunda-platform
+          app.kubernetes.io/component: zeebe-gateway
+          app.kubernetes.io/instance: camunda-platform
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: camunda-platform
+          app.kubernetes.io/part-of: camunda-platform
+          app.kubernetes.io/version: 8.6.5
+          helm.sh/chart: camunda-platform-11.0.4
+      spec:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - zeebe-gateway
+              topologyKey: kubernetes.io/hostname
+        containers:
+        - env:
+          - name: CAMUNDA_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: CAMUNDA_LICENSE_KEY
+                name: camunda-platform-license
+          - name: ZEEBE_STANDALONE_GATEWAY
+            value: "true"
+          - name: ZEEBE_GATEWAY_CLUSTER_MEMBERID
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: ZEEBE_LOG_LEVEL
+            value: info
+          - name: JAVA_TOOL_OPTIONS
+            value: -XX:+ExitOnOutOfMemoryError
+          - name: ZEEBE_GATEWAY_CLUSTER_INITIALCONTACTPOINTS
+            value: camunda-platform-zeebe:26502
+          - name: ZEEBE_GATEWAY_CLUSTER_HOST
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          image: camunda/zeebe:8.6.5
+          imagePullPolicy: IfNotPresent
+          name: zeebe-gateway
+          ports:
+          - containerPort: 9600
+            name: http
+            protocol: TCP
+          - containerPort: 26500
+            name: gateway
+            protocol: TCP
+          - containerPort: 26502
+            name: internal
+            protocol: TCP
+          - containerPort: 8080
+            name: rest
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9600
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 400m
+              memory: 450Mi
+            requests:
+              cpu: 400m
+              memory: 450Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /usr/local/zeebe/config/application.yaml
+            name: config
+            subPath: application.yaml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        serviceAccount: camunda-platform-zeebe-gateway
+        serviceAccountName: camunda-platform-zeebe-gateway
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp
+        - configMap:
+            defaultMode: 484
+            name: camunda-platform-zeebe-gateway-configuration
+          name: config
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-11-23T06:48:27Z"
+      lastUpdateTime: "2024-11-23T06:48:27Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2024-11-23T06:46:26Z"
+      lastUpdateTime: "2024-11-23T06:48:27Z"
+      message: ReplicaSet "camunda-platform-zeebe-gateway-7dfdf97594" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
